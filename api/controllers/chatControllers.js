@@ -6,7 +6,7 @@ exports.getChats = async (req, res) => {
       messages: { $elemMatch: { user_id: req.user._id } },
     });
 
-    res.status(200).json(chats);
+    res.status(200).json({ email: req.user.email, chats });
   } catch (error) {
     res.status(500).json({ message: "Mesajlarınızı alırken bir sorun oluştu" });
   }
@@ -29,11 +29,13 @@ exports.createChat = async (req, res) => {
         {
           name: req.user.name,
           surname: req.user.surname,
+          email: req.user.email,
         },
 
         {
           name: req.body.name,
           surname: req.body.surname,
+          email: req.body.email,
         },
       ],
       messages: [],

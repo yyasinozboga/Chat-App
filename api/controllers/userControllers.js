@@ -10,13 +10,7 @@ const signToken = (user_id) => {
 const createSendToken = (user, code, res) => {
   const token = signToken(user._id);
 
-  res.status(code).json({
-    status: "success",
-    token,
-    data: {
-      user,
-    },
-  });
+  res.status(code).json({ token });
 };
 
 exports.singup = async (req, res) => {
@@ -52,10 +46,17 @@ exports.login = async (req, res) => {
 
   const token = signToken(user._id);
 
-  res.status(200).json({
-    status: "success",
-    token,
-  });
+  res.status(200).json({ token });
+};
+
+exports.getUser = async (req, res) => {
+  const user = await User.findOne({ email: req.params.email });
+
+  if (!user) {
+    return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+  }
+
+  res.status(200).json(user);
 };
 
 exports.protect = async (req, res, next) => {

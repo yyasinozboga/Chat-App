@@ -1,5 +1,10 @@
 const express = require("express");
-const { singup, login, protect } = require("../controllers/userControllers");
+const {
+  singup,
+  login,
+  protect,
+  getUser,
+} = require("../controllers/userControllers");
 const {
   getChat,
   getChats,
@@ -8,6 +13,8 @@ const {
 } = require("../controllers/chatControllers");
 
 const router = express.Router();
+
+router.get("/users/:email", getUser);
 
 router.post("/signup", singup);
 
