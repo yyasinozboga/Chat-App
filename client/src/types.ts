@@ -40,3 +40,9 @@ export type UserType = {
   surname: string;
   email: string;
 };
+
+export type CreateChat = {
+  name: string;
+  surname: string;
+  email: string;
+};

@@ -3,8 +3,8 @@ const { Schema, default: mongoose } = require("mongoose");
 const chatSchema = new Schema(
   {
     users: [
-      { name: String, surname: String },
-      { name: String, surname: String },
+      { name: String, surname: String, email: String },
+      { name: String, surname: String, email: String },
     ],
     messages: [
       {

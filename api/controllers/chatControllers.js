@@ -2,8 +2,12 @@ const Chat = require("../modals/chatModal");
 
 exports.getChats = async (req, res) => {
   try {
+    //    const chats = await Chat.find({
+    //      messages: { $elemMatch: { user_id: req.user._id } },
+    //    });
+
     const chats = await Chat.find({
-      messages: { $elemMatch: { user_id: req.user._id } },
+      users: { $elemMatch: { email: req.user.email } },
     });
 
     res.status(200).json({ email: req.user.email, chats });

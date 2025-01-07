@@ -1,8 +1,12 @@
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ChatType} from '../../types';
 import {getChats} from '../../api/verbs';
-import {Avatar, List} from 'react-native-paper';
+import normalize from '../../utils/helper';
+import Card from '../../components/card';
+import Header from './Header';
+import Plus from '../../assets/icons/Plus';
+import CreateChat from './CreateChat';
 
 type Props = {
   email: string;
@@ -11,6 +15,7 @@ type Props = {
 
 const Chats = () => {
   const [data, setData] = useState<null | Props>(null);
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
 
   const fetchChats = async () => {
     const chats = await getChats();
@@ -22,32 +27,48 @@ const Chats = () => {
     fetchChats();
   }, []);
 
-  const getFullName = (chat: ChatType) => {
-    if (data) {
-      const user = chat.users.find(user => user.email !== data.email);
-      const fullName = (user?.name as string) + ' ' + user?.surname;
-
-      return fullName;
-    }
-  };
-
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
+      <Header />
       {data && (
         <FlatList
+          style={styles.container}
           data={data.chats}
-          renderItem={({item}) => (
-            <List.Item
-              title={getFullName(item)}
-              left={() => <Avatar.Text label={getFullName(item) as string} />}
-            />
-          )}
+          renderItem={({item}) => <Card chat={item} email={data.email} />}
         />
       )}
-    </SafeAreaView>
+      <Pressable onPress={() => setIsDialogVisible(true)} style={styles.button}>
+        <Plus width={normalize(30)} height={normalize(30)} />
+      </Pressable>
+
+      <CreateChat
+        isVisible={isDialogVisible}
+        close={() => setIsDialogVisible(false)}
+      />
+    </View>
   );
 };
 
 export default Chats;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    width: normalize(390),
+    position: 'absolute',
+    top: normalize(195),
+    backgroundColor: '#ffffff',
+    height: '100%',
+  },
+
+  button: {
+    width: normalize(50),
+    height: normalize(50),
+    borderRadius: normalize(50),
+    position: 'absolute',
+    bottom: normalize(50),
+    right: normalize(20),
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
