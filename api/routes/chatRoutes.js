@@ -20,7 +20,10 @@ router.post("/signup", singup);
 
 router.post("/login", login);
 
-router.route("/chats").get(protect, getChats).post(protect, createChat);
+router
+  .route("/chats")
+  .get(protect, getChats)
+  .post(protect, getUser, createChat);
 
 router.route("/chats/:id").get(getChat).post(protect, addMessage);
 

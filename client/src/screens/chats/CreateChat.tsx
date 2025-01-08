@@ -3,7 +3,9 @@ import React from 'react';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import {Formik} from 'formik';
 import normalize from '../../utils/helper';
-import {addChat} from '../../api/verbs';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../redux/store';
+import {addChat} from '../../redux/actions';
 
 type Props = {
   isVisible: boolean;
@@ -23,8 +25,10 @@ const CreateChat = ({isVisible, close}: Props) => {
     email: '',
   };
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleSubmit = async (values: InitialValuesType) => {
-    await addChat(values);
+    dispatch(addChat(values));
     close();
   };
 

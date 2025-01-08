@@ -1,6 +1,6 @@
-import {SignUpBodyType, LoginBodyType, UserType, CreateChat} from '../types';
-import {CHATS_URL, LOGIN_URL, SIGNUP_URL, USERS_URL} from './urls';
-import {getToken, saveToken} from '../services/keychain';
+import {SignUpBodyType, LoginBodyType, UserType} from '../types';
+import {LOGIN_URL, SIGNUP_URL, USERS_URL} from './urls';
+import {saveToken} from '../services/keychain';
 import api from './instance';
 
 export const createUser = async (body: SignUpBodyType) => {
@@ -17,32 +17,10 @@ export const loginUser = async (body: LoginBodyType) => {
   }
 };
 
-export const getChats = async () => {
-  const token = await getToken();
-
-  if (token) {
-    const results = await api.get(CHATS_URL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return results.data;
-  }
-};
-
 export const getUser = async (email: string) => {
   const user: UserType = await api
     .get(`${USERS_URL}/${email}`)
     .then(res => res.data);
 
   return user;
-};
-
-export const addChat = async (body: CreateChat) => {
-  await api.post(CHATS_URL, body, {
-    headers: {
-      Authorization: `Bearer ${await getToken()}`,
-    },
-  });
 };

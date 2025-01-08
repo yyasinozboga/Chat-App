@@ -49,14 +49,16 @@ exports.login = async (req, res) => {
   res.status(200).json({ token });
 };
 
-exports.getUser = async (req, res) => {
-  const user = await User.findOne({ email: req.params.email });
+exports.getUser = async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
     return res.status(404).json({ message: "Kullanıcı bulunamadı" });
   }
 
-  res.status(200).json(user);
+  req.foundUser = user;
+
+  next();
 };
 
 exports.protect = async (req, res, next) => {

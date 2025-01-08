@@ -2,15 +2,18 @@ const { Schema, default: mongoose } = require("mongoose");
 
 const chatSchema = new Schema(
   {
+    user_id: String,
     users: [
-      { name: String, surname: String, email: String },
-      { name: String, surname: String, email: String },
+      { name: String, surname: String, user_id: String },
+      { name: String, surname: String, user_id: String },
     ],
     messages: [
       {
-        message: String,
-        user_id: String,
+        text: String,
         createdAt: Date,
+        user: {
+          _id: String,
+        },
       },
     ],
   },

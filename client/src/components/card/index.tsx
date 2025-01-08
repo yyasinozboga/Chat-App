@@ -10,11 +10,11 @@ import {screens} from '../../utils/constants';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const Card = ({chat, email}: {chat: ChatType; email: string}) => {
+const Card = ({chat, id}: {chat: ChatType; id: string}) => {
   const navigation = useNavigation<NavigationProp>();
 
   const getFullName = (chat: ChatType, firstLetter?: boolean) => {
-    const user = chat.users.find(user => user.email !== email);
+    const user = chat.users.find(user => user.user_id !== id);
     const fullName = user?.name + ' ' + user?.surname;
 
     if (firstLetter) {
@@ -28,7 +28,7 @@ const Card = ({chat, email}: {chat: ChatType; email: string}) => {
   };
 
   const time = new Date(
-    chat.messages[chat.messages.length - 1]?.createdAt as string,
+    chat.messages[chat.messages.length - 1]?.createdAt,
   ).toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: 'numeric',
@@ -37,7 +37,9 @@ const Card = ({chat, email}: {chat: ChatType; email: string}) => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate(screens.chat, {id: chat._id})}
+      onPress={() =>
+        navigation.navigate(screens.chat, {id: chat._id, user_id: id})
+      }
       style={styles.item}>
       <List.Item
         title={() => (
@@ -49,7 +51,7 @@ const Card = ({chat, email}: {chat: ChatType; email: string}) => {
             </View>
           </View>
         )}
-        description={chat.messages[chat.messages.length - 1]?.message}
+        description={chat.messages[chat.messages.length - 1]?.text}
         style={{height: normalize(76)}}
         left={() => (
           <Avatar.Text

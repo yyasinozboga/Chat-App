@@ -1,30 +1,24 @@
 import {FlatList, Pressable, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ChatType} from '../../types';
-import {getChats} from '../../api/verbs';
+import {ChatsStore, ChatType} from '../../types';
 import normalize from '../../utils/helper';
 import Card from '../../components/card';
 import Header from './Header';
 import Plus from '../../assets/icons/Plus';
 import CreateChat from './CreateChat';
-
-type Props = {
-  email: string;
-  chats: ChatType[];
-};
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch} from '../../redux/store';
+import {getChats} from '../../redux/actions';
 
 const Chats = () => {
-  const [data, setData] = useState<null | Props>(null);
+  const {isLoading, error, data} = useSelector(
+    (store: ChatsStore) => store.chats,
+  );
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-
-  const fetchChats = async () => {
-    const chats = await getChats();
-
-    setData(chats);
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    fetchChats();
+    dispatch(getChats());
   }, []);
 
   return (
@@ -34,7 +28,7 @@ const Chats = () => {
         <FlatList
           style={styles.container}
           data={data.chats}
-          renderItem={({item}) => <Card chat={item} email={data.email} />}
+          renderItem={({item}) => <Card chat={item} id={data.user_id} />}
         />
       )}
       <Pressable onPress={() => setIsDialogVisible(true)} style={styles.button}>
