@@ -1,4 +1,5 @@
 import {Dimensions, Platform, PixelRatio} from 'react-native';
+import {ChatType} from '../types';
 
 export var {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} =
   Dimensions.get('window');
@@ -18,3 +19,21 @@ export default function normalize(
     return Math.round(PixelRatio.roundToNearestPixel(newSize));
   }
 }
+
+export const getFullName = (
+  chat: ChatType,
+  firstLetter: boolean,
+  id: string,
+) => {
+  const user = chat.users.find(user => user.user_id !== id);
+  const fullName = user?.name + ' ' + user?.surname;
+
+  if (firstLetter) {
+    const firstLetterOfName = user?.name.charAt(0) as string;
+    const firstLetterOfSurname = user?.surname.charAt(0);
+
+    return firstLetterOfName + firstLetterOfSurname;
+  }
+
+  return fullName;
+};

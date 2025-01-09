@@ -5,6 +5,7 @@ import Routes from './src/routes/Routes';
 import {DefaultTheme, PaperProvider} from 'react-native-paper';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const App = () => {
   const theme = {
@@ -21,9 +22,11 @@ const App = () => {
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
-        <NavigationContainer>
-          <Routes />
-        </NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Routes />
+          </NavigationContainer>
+        </SafeAreaProvider>
       </PaperProvider>
     </Provider>
   );

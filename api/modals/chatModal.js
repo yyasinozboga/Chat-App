@@ -14,6 +14,7 @@ const chatSchema = new Schema(
         user: {
           _id: String,
         },
+        _id: { type: String, required: true },
       },
     ],
   },

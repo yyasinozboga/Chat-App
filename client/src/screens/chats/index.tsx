@@ -1,6 +1,6 @@
-import {FlatList, Pressable, StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {ChatsStore, ChatType} from '../../types';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {ChatsStore} from '../../types';
 import normalize from '../../utils/helper';
 import Card from '../../components/card';
 import Header from './Header';
@@ -9,6 +9,7 @@ import CreateChat from './CreateChat';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch} from '../../redux/store';
 import {getChats} from '../../redux/actions';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Chats = () => {
   const {isLoading, error, data} = useSelector(
@@ -17,28 +18,41 @@ const Chats = () => {
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    dispatch(getChats());
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getChats());
+    }, []),
+  );
 
   return (
     <View style={{flex: 1}}>
       <Header />
-      {data && (
-        <FlatList
-          style={styles.container}
-          data={data.chats}
-          renderItem={({item}) => <Card chat={item} id={data.user_id} />}
-        />
-      )}
-      <Pressable onPress={() => setIsDialogVisible(true)} style={styles.button}>
-        <Plus width={normalize(30)} height={normalize(30)} />
-      </Pressable>
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : error ? (
+        <Text>Error!</Text>
+      ) : (
+        data && (
+          <>
+            <FlatList
+              style={styles.container}
+              data={data.chats}
+              renderItem={({item}) => <Card chat={item} id={data.user_id} />}
+            />
 
-      <CreateChat
-        isVisible={isDialogVisible}
-        close={() => setIsDialogVisible(false)}
-      />
+            <Pressable
+              onPress={() => setIsDialogVisible(true)}
+              style={styles.button}>
+              <Plus width={normalize(30)} height={normalize(30)} />
+            </Pressable>
+
+            <CreateChat
+              isVisible={isDialogVisible}
+              close={() => setIsDialogVisible(false)}
+            />
+          </>
+        )
+      )}
     </View>
   );
 };

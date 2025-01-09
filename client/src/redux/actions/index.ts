@@ -2,7 +2,7 @@ import {createAsyncThunk} from './../../../node_modules/@reduxjs/toolkit/src/cre
 import api from '../../api/instance';
 import {CHATS_URL} from '../../api/urls';
 import {getToken} from '../../services/keychain';
-import {CreateChat} from '../../types';
+import {AddMessage, CreateChat, MessageType} from '../../types';
 
 export const getChats = createAsyncThunk(
   'chats/getChats',
@@ -55,6 +55,23 @@ export const addChat = createAsyncThunk(
   async (body: CreateChat, {rejectWithValue}) => {
     try {
       const {data} = await api.post(CHATS_URL, body, {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      });
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const addMessage = createAsyncThunk(
+  'chat/addMessage',
+  async (params: AddMessage, {rejectWithValue}) => {
+    try {
+      const {data} = await api.post(`${CHATS_URL}/${params.id}`, params.body, {
         headers: {
           Authorization: `Bearer ${await getToken()}`,
         },

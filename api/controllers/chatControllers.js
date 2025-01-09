@@ -53,24 +53,19 @@ exports.createChat = async (req, res) => {
 
 exports.addMessage = async (req, res) => {
   try {
-    const chat = await Chat.findByIdAndUpdate(
+    await Chat.findByIdAndUpdate(
       req.params.id,
       {
         $push: {
-          messages: {
-            text: req.body.text,
-            createdAt: Date.now(),
-            user: {
-              _id: req.user._id,
-            },
-          },
+          messages: req.body,
         },
       },
       { new: true }
     );
 
-    res.status(200).json(chat);
+    res.status(200).json(req.body);
   } catch (error) {
+    console.log(error.message);
     res.status(404).json({ message: "Mesajınız gönderilemid!" });
   }
 };

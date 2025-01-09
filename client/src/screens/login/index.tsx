@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from './Header';
 import normalize from '../../utils/helper';
@@ -14,15 +14,15 @@ type Props = NativeStackScreenProps<RootStackParamList, 'login'>;
 const Login = ({navigation}: Props) => {
   const [selected, setSelected] = useState('login');
 
-  const fetchToken = async () => {
-    const token = await getToken();
-
-    if (token) {
-      navigation.navigate(screens.chats);
-    }
-  };
-
   useEffect(() => {
+    const fetchToken = async () => {
+      const token = await getToken();
+
+      if (token) {
+        navigation.navigate(screens.chats);
+      }
+    };
+
     fetchToken();
   }, []);
 

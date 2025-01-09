@@ -69,3 +69,8 @@ export type ChatStore = {
     chat: null | ChatType;
   };
 };
+
+export type AddMessage = {
+  id: string;
+  body: MessageType;
+};

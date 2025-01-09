@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {ChatType} from '../../types';
-import {getChat} from '../actions';
+import {ChatType, MessageType} from '../../types';
+import {addMessage, getChat} from '../actions';
 
 interface Chat {
   isLoading: boolean;
@@ -32,6 +32,26 @@ const chatSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.chat = payload;
+    });
+
+    builder.addCase(addMessage.pending, state => {
+      state.isLoading = true;
+    });
+
+    builder.addCase(addMessage.rejected, (state, {error}) => {
+      state.isLoading = false;
+      state.error = error.message as string;
+    });
+
+    builder.addCase(addMessage.fulfilled, (state, {payload}) => {
+      state.isLoading = false;
+      state.error = null;
+      if (state.chat) {
+        state.chat = {
+          ...state.chat,
+          messages: [...state.chat.messages, payload],
+        };
+      }
     });
   },
 });

@@ -2,7 +2,7 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Avatar, Divider, List} from 'react-native-paper';
 import {ChatType, RootStackParamList} from '../../types';
-import normalize from '../../utils/helper';
+import normalize, {getFullName} from '../../utils/helper';
 import ArrowRight from '../../assets/icons/ArrowRight';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -12,20 +12,6 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Card = ({chat, id}: {chat: ChatType; id: string}) => {
   const navigation = useNavigation<NavigationProp>();
-
-  const getFullName = (chat: ChatType, firstLetter?: boolean) => {
-    const user = chat.users.find(user => user.user_id !== id);
-    const fullName = user?.name + ' ' + user?.surname;
-
-    if (firstLetter) {
-      const firstLetterOfName = user?.name.charAt(0) as string;
-      const firstLetterOfSurname = user?.surname.charAt(0);
-
-      return firstLetterOfName + firstLetterOfSurname;
-    }
-
-    return fullName;
-  };
 
   const time = new Date(
     chat.messages[chat.messages.length - 1]?.createdAt,
@@ -44,7 +30,7 @@ const Card = ({chat, id}: {chat: ChatType; id: string}) => {
       <List.Item
         title={() => (
           <View style={styles.textContainer}>
-            <Text>{getFullName(chat)}</Text>
+            <Text>{getFullName(chat, false, id)}</Text>
             <View style={styles.itemRight}>
               <Text style={styles.time}>{time !== 'Invalid Date' && time}</Text>
               <ArrowRight width={normalize(20)} height={normalize(20)} />
@@ -56,7 +42,7 @@ const Card = ({chat, id}: {chat: ChatType; id: string}) => {
         left={() => (
           <Avatar.Text
             labelStyle={styles.text}
-            label={getFullName(chat, true)}
+            label={getFullName(chat, true, id)}
             size={normalize(45)}
           />
         )}
@@ -67,7 +53,7 @@ const Card = ({chat, id}: {chat: ChatType; id: string}) => {
   );
 };
 
-export default Card;
+export default React.memo(Card);
 
 const styles = StyleSheet.create({
   item: {
