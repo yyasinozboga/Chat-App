@@ -3,7 +3,6 @@ import React, {useCallback, useState} from 'react';
 import {ChatsStore} from '../../types';
 import normalize from '../../utils/helper';
 import Card from '../../components/card';
-import Header from './Header';
 import Plus from '../../assets/icons/Plus';
 import CreateChat from './CreateChat';
 import {useDispatch, useSelector} from 'react-redux';
@@ -26,7 +25,6 @@ const Chats = () => {
 
   return (
     <View style={{flex: 1}}>
-      <Header />
       {isLoading ? (
         <Text>Loading...</Text>
       ) : error ? (

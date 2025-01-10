@@ -24,7 +24,7 @@ const Card = ({chat, id}: {chat: ChatType; id: string}) => {
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate(screens.chat, {id: chat._id, user_id: id})
+        navigation.navigate(screens.chat, {id: chat._id, user_id: id, chat})
       }
       style={styles.item}>
       <List.Item
