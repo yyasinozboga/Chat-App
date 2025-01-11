@@ -2,29 +2,26 @@ import {createAsyncThunk} from './../../../node_modules/@reduxjs/toolkit/src/cre
 import api from '../../api/instance';
 import {CHATS_URL} from '../../api/urls';
 import {getToken} from '../../services/keychain';
-import {AddMessage, CreateChat, MessageType} from '../../types';
+import {AddMessage, CreateChat} from '../../types';
 
 export const getChats = createAsyncThunk(
   'chats/getChats',
-  async (_, {rejectWithValue}) => {
+  async (params: object | undefined, {rejectWithValue}) => {
     try {
       const token = await getToken();
 
       if (token) {
-        const results = await api.get(CHATS_URL, {
+        const {data} = await api.get(CHATS_URL, {
+          params,
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        return results.data;
+        return data;
       }
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message ||
-          error.message ||
-          'Bilinmeyen bir hata oluştu',
-      );
+      return rejectWithValue(error.message);
     }
   },
 );

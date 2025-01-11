@@ -1,6 +1,13 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {ChatsStore} from '../../types';
+import {
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {ChatsStore, RootStackParamList} from '../../types';
 import normalize from '../../utils/helper';
 import Card from '../../components/card';
 import Plus from '../../assets/icons/Plus';
@@ -9,8 +16,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch} from '../../redux/store';
 import {getChats} from '../../redux/actions';
 import {useFocusEffect} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-const Chats = () => {
+type Props = NativeStackScreenProps<RootStackParamList>;
+
+const Chats = ({navigation}: Props) => {
   const {isLoading, error, data} = useSelector(
     (store: ChatsStore) => store.chats,
   );
@@ -19,12 +29,20 @@ const Chats = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getChats());
+      dispatch(getChats(undefined));
     }, []),
   );
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerSearchBarOptions: {
+        onChangeText: e => dispatch(getChats({text: e.nativeEvent.text})),
+      },
+    });
+  }, [navigation]);
+
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       {isLoading ? (
         <Text>Loading...</Text>
       ) : error ? (
@@ -51,7 +69,7 @@ const Chats = () => {
           </>
         )
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -59,11 +77,7 @@ export default Chats;
 
 const styles = StyleSheet.create({
   container: {
-    width: normalize(390),
-    position: 'absolute',
-    top: normalize(195),
     backgroundColor: '#ffffff',
-    height: '100%',
   },
 
   button: {
