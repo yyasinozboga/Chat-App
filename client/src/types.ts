@@ -3,6 +3,8 @@ export type RootStackParamList = {
   signup: undefined;
   chats: undefined;
   chat: {id: string; user_id: string; chat: ChatType};
+  profile: {id: string};
+  home: undefined;
 };
 
 export type SignUpBodyType = {

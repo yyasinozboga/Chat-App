@@ -3,4 +3,6 @@ export const screens = {
   signup: 'signup',
   chats: 'chats',
   chat: 'chat',
+  home: 'home',
+  profile: 'profile',
 } as const;

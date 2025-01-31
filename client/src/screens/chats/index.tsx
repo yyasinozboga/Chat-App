@@ -34,9 +34,10 @@ const Chats = ({navigation}: Props) => {
   );
 
   useLayoutEffect(() => {
-    navigation.setOptions({
+    navigation?.getParent()?.setOptions({
       headerSearchBarOptions: {
-        onChangeText: e => dispatch(getChats({text: e.nativeEvent.text})),
+        onChangeText: (e: any) =>
+          dispatch(getChats({text: e.nativeEvent.text})),
       },
     });
   }, [navigation]);

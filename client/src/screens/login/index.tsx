@@ -19,7 +19,7 @@ const Login = ({navigation}: Props) => {
       const token = await getToken();
 
       if (token) {
-        navigation.navigate(screens.chats);
+        navigation.navigate(screens.home);
       }
     };
 

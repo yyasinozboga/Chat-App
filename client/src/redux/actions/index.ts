@@ -2,7 +2,7 @@ import {createAsyncThunk} from './../../../node_modules/@reduxjs/toolkit/src/cre
 import api from '../../api/instance';
 import {CHATS_URL} from '../../api/urls';
 import {getToken} from '../../services/keychain';
-import {AddMessage, CreateChat} from '../../types';
+import {AddMessage, CreateChat, LoginBodyType} from '../../types';
 
 export const getChats = createAsyncThunk(
   'chats/getChats',

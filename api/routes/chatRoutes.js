@@ -3,7 +3,8 @@ const {
   singup,
   login,
   protect,
-  getUser,
+  getUserByEmail,
+  getUserById,
 } = require("../controllers/userControllers");
 const {
   getChat,
@@ -14,7 +15,8 @@ const {
 
 const router = express.Router();
 
-router.get("/users/:email", getUser);
+router.route("/users/:id").get(protect, getUserById);
+router.route("/users").get(protect, getUserById);
 
 router.post("/signup", singup);
 
@@ -23,7 +25,7 @@ router.post("/login", login);
 router
   .route("/chats")
   .get(protect, getChats)
-  .post(protect, getUser, createChat);
+  .post(protect, getUserByEmail, createChat);
 
 router.route("/chats/:id").get(getChat).post(protect, addMessage);
 

@@ -3,16 +3,27 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {screens} from '../utils/constants';
 import {RootStackParamList} from '../types';
 import Login from '../screens/login';
-import Signup from '../screens/signup';
-import Chats from '../screens/chats';
 import Chat from '../screens/chat';
 import CustomHeader from '../components/customHeader';
+import TabBarRoutes from './tabBarRoutes';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Routes = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({route}) => {
+        const focusedRouteName = getFocusedRouteNameFromRoute(route);
+
+        return {
+          headerShown:
+            focusedRouteName !== screens.profile &&
+            focusedRouteName !== screens.login
+              ? true
+              : false,
+        };
+      }}>
       <Stack.Screen
         name={screens.login}
         component={Login}
@@ -20,10 +31,9 @@ const Routes = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen name={screens.signup} component={Signup} />
       <Stack.Screen
-        name={screens.chats}
-        component={Chats}
+        name={screens.home}
+        component={TabBarRoutes}
         options={{
           headerSearchBarOptions: {
             placeholder: 'Search',
