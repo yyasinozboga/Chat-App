@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, TextInput, Pressable} from 'react-native';
 import React from 'react';
 import normalize from '../../utils/helper';
 import {Formik} from 'formik';
-import {loginUser} from '../../api/verbs';
+import {createUser, loginUser} from '../../api/verbs';
 
 type InitalValuesTypes = {
   email: string;
@@ -28,6 +28,15 @@ const Fields = ({selected}: {selected: string}) => {
       console.log(body);
 
       await loginUser(body);
+    } else {
+      const newUser = {
+        email: values.email,
+        name: values.name,
+        password: values.password,
+        surname: values.surname,
+        passwordConfirm: values.confirmPassword,
+      };
+      await createUser(newUser);
     }
   };
 

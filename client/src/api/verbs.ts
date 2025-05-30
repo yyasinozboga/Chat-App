@@ -2,11 +2,19 @@ import {SignUpBodyType, LoginBodyType, UserType} from '../types';
 import {LOGIN_URL, SIGNUP_URL, USERS_URL} from './urls';
 import {saveToken} from '../services/keychain';
 import api from './instance';
+import {AxiosError} from 'axios';
 
 export const createUser = async (body: SignUpBodyType) => {
-  const token: string = await api.post(SIGNUP_URL, body).then(res => res.data);
+  try {
+    console.log(body);
+    const {data} = await api.post(SIGNUP_URL, body);
 
-  saveToken(token);
+    saveToken(data.token);
+  } catch (error) {
+    const err = error as AxiosError;
+
+    console.log(err.response?.data);
+  }
 };
 
 export const loginUser = async (body: LoginBodyType) => {

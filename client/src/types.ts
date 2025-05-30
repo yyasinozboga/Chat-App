@@ -12,6 +12,7 @@ export type SignUpBodyType = {
   surname: string;
   email: string;
   password: string;
+  passwordConfirm: string;
 };
 
 export type LoginBodyType = {

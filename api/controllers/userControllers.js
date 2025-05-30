@@ -23,6 +23,8 @@ exports.singup = async (req, res) => {
       passwordConfirm: req.body.passwordConfirm,
     });
 
+    console.log(newUser);
+
     createSendToken(newUser, 201, res);
   } catch (error) {
     res.status(404).json({ message: error.message });
